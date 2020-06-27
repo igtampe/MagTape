@@ -41,10 +41,10 @@ public class magtape<E> implements Iterable<E>{
 	public class tapeiterator implements Iterator<E>{
 		
 		private tapebit currentiteratorbit;
-		public tapeiterator() {currentiteratorbit = header;}
+		public tapeiterator() {currentiteratorbit = head;}
 		
 		//if the next one isn't the footer, we have a next one.
-		public boolean hasNext() {return currentiteratorbit.next!=footer;}
+		public boolean hasNext() {return currentiteratorbit.next!=tail;}
 
 		public E next() {
 			//move forward one position
@@ -62,8 +62,8 @@ public class magtape<E> implements Iterable<E>{
 	 * Dummy nodes at the beginning and end.
 	 * these will be used by the itterator, and the rewind/FFToEnd functions
 	 */
-	private tapebit header;
-	private tapebit footer;
+	private tapebit head;
+	private tapebit tail;
 	
 	/**
 	 * length of the tape in tapebits.
@@ -86,12 +86,12 @@ public class magtape<E> implements Iterable<E>{
 	public magtape() {
 		
 		//Create the header and footer
-		header=new tapebit(null);
-		footer=new tapebit(null);
+		head=new tapebit(null);
+		tail=new tapebit(null);
 		
 		//remember to link the header and footer.
-		header.setNext(footer);
-		footer.setPrev(header);
+		head.setNext(tail);
+		tail.setPrev(head);
 		
 		//This tape is currently empty, so the length is 0.
 		length=0;
@@ -249,7 +249,7 @@ public class magtape<E> implements Iterable<E>{
 	 * @param value
 	 */
 	public void setCurrent(E value) {
-		if(current==header||current==footer) {throw new IllegalStateException("This magtape is in a position that cannot be modified.");}
+		if(current==head||current==tail) {throw new IllegalStateException("This magtape is in a position that cannot be modified.");}
 		current.setValue(value);
 	}
 	
@@ -312,7 +312,7 @@ public class magtape<E> implements Iterable<E>{
 	 */
 	public void moveForward() throws thunk {
 		if(verboseMode) {System.out.print("Tuck"+currentpos+"+-");}
-		if(current==footer) {throw new thunk(thunktype.front);}
+		if(current==tail) {throw new thunk(thunktype.front);}
 		current=current.getNext();
 		currentpos++;
 	}
@@ -323,7 +323,7 @@ public class magtape<E> implements Iterable<E>{
 	 */
 	public void moveBack() throws thunk {
 		if(verboseMode) {System.out.print("Tuck"+currentpos+"--");}
-		if(current==header) {throw new thunk(thunktype.back);}
+		if(current==head) {throw new thunk(thunktype.back);}
 		current=current.getPrev();
 		currentpos--;
 	}
@@ -333,7 +333,7 @@ public class magtape<E> implements Iterable<E>{
 	 */
 	public void FFToEnd() {
 		if(verboseMode) {System.out.print("Whirr+-");}
-		current=footer;
+		current=tail;
 		currentpos=length; //length also represents the position of the footer. We'll set it to that. 
 	}
 	
@@ -342,7 +342,7 @@ public class magtape<E> implements Iterable<E>{
 	 */
 	public void rewind() {
 		if(verboseMode) {System.out.print("Whirr--");}
-		current=header; //The current tape will be at the header.
+		current=head; //The current tape will be at the header.
 		currentpos=-1; //use negative one, because the header is behind the first entry in this tape, which is entry 0.
 	}
 
