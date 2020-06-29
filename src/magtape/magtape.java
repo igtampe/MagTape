@@ -292,13 +292,19 @@ public class magtape<E> implements Iterable<E>{
 		
 		//the tape should probably thunk instead of just doing this. That way at least we have a reason to have this thing throw it. Plus, it lets the user know of the tape's position beign at either end.
 		//also, this would waste a little time, but this DS should probably not be used for anything other than demonstrational purposes. I doubt anyone would use it professionally.
-		
 		//bueno if someone does, then I guess remove that check.
 		
-		//these checks could be removed, but they save time.
-		if(pos==length) {FFToEnd(); return;}
-		if(pos==-1) {rewind(); return;}
+		//Check if it would be closer to just move the tape to either end instead of traversing the entire tape.
 		
+		if(pos==length||(Math.abs(pos-currentpos)>Math.abs(pos-length))) {FFToEnd();} 
+		//If the distance between where the tape is and the requested position is greater than the distance from the end of the tape to the position, fast forward the tape to the end.
+		//also if the position *is* the end, fast forward it to the end.
+				
+		if(pos==-1||(Math.abs(pos-currentpos)>Math.abs(pos+1))) {rewind();}
+		//If the distance between where the tape is and the requested position is greater than the distance from the beginning of the tape to the position, rewind the tape.
+		//Plus 1 because the beginning of the tape is position -1.
+		//also if the position *is* the beginning, rewind it to the beginning
+				
 		//decide whether we need to rewind or fast-forward to get to the current position
 		if(currentpos>pos) {while (currentpos!=pos) {moveBack();}}
 		if(currentpos<pos) {while (currentpos!=pos) {moveForward();}}
