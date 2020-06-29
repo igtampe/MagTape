@@ -105,9 +105,18 @@ public class magtapeTest {
 		System.out.println("\n\n OK! Good! \n\n Actually thinking about it, this probably does make sense in a physical interpretation. Moving one by one would take confirming that you actually moved one spot"
 				+ "\n while fast-forwarding would probably be able to be done a lot faster since it stops once the tape hits the edge, or just before a real life THUNK! moment. Huh.");
 		
+		
+		System.out.println("\nOne last thing");
+		Tape2.rewind();
+		try {Tape2.spliceOut();} catch (IllegalStateException e) {System.out.println("Good, the tape cannot splice out the head");}
+		
+		Tape2.FFToEnd();
+		try {Tape2.spliceOut();} catch (IllegalStateException e) {System.out.println("Good, the tape cannot splice out the tail");}
+		try {Tape2.spliceIn(1);} catch (IllegalStateException e) {System.out.println("Good, the tape cannot splice in an element after the tail.");}
+		
+		
 		System.out.println("\n\n Anyways this has been my cosito thanks for watching adiositooooooo");
-		
-		
+				
 		
 	}
 	

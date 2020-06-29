@@ -191,8 +191,11 @@ public class magtape<E> implements Iterable<E>{
 	 */
 	public void spliceIn(E newbitVal) {
 		
-		//Essentially we're going to "cut" the magtape, and "splice" in a new bit of tape with the data we want.
-		if(verboseMode) {System.out.print("Snip-");}
+		//Check to make sure the user doesn't accidentilly snip in a thing in front of the tail. Those would be inaccessible.
+		if(current==tail) {throw new IllegalStateException("Cannot splice in elements in front of the tail!");}
+		
+		//Essentially we're going to "cut" the magtape, and "splice" in a new bit of tape with the data we want.				
+		if(verboseMode) {System.out.print("Snip+-");}
 		
 		//Create a new bit which will be between prevbit and prevbit's next bit.
 		tapebit newbit = new tapebit(newbitVal,current,current.getNext());
@@ -213,10 +216,13 @@ public class magtape<E> implements Iterable<E>{
 	 * Function to splice out the current value.
 	 */
 	public void spliceOut() {
+
+		//Check to make sure the user doesn't accidentally snip out the head or tail. That would be ugly.
+		if(current==head||current==tail) {throw new IllegalStateException("Cannot snip out head or tail!");}
 		
 		//essentially, we're going to "cut" out the current bit, and "splice" the surorunding bits together.
-		if(verboseMode) {System.out.print("Snip-");}
-		
+		if(verboseMode) {System.out.print("Snip--");}
+	
 		//Connect the bit's surrounding bits together.
 		current.getPrev().setNext(current.getNext()); //Set Current's previous bit's next entry to Current's next.
 		current.getNext().setPrev(current.getPrev()); //Set Current's next bit's previous entry to Current's previous.
